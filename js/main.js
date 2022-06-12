@@ -3,9 +3,10 @@ const RANGE_NUMBERS = {
   photoLast: 25,
   likeFirst: 15,
   likeLast: 200,
+  commentsNumberFirst: 1,
+  commentsNumberLast: 5,
   avatarFirst: 1,
   avatarLast: 6,
-  commentatorNumber: 1000
 };
 
 const DESCRIPTION_VALUES = [
@@ -45,55 +46,52 @@ const getRandomNumber = (firstRangeNumber, lastRangeNumber) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-const getIntNormalArray = (arrayLength) => {
-  const intArray = [];
-
-  for (let i = 0; i < arrayLength; i++) {
-    intArray[i] = i + 1;
-  }
-
-  return intArray;
-};
-
 const getIntRandomArray = (arrayLength) => {
-  const randomArray = getIntNormalArray(arrayLength);
-
-  for (let i = 0; i < arrayLength; i++) {
-    const swap = randomArray[i];
-    const randomIndex = getRandomNumber(0, arrayLength - 1);
-    randomArray[i] = randomArray[randomIndex];
-    randomArray[randomIndex] = swap;
+  const randomArray = [];
+  while (randomArray.length < arrayLength) {
+    const arrayElement = getRandomNumber(1, arrayLength);
+    if (randomArray.some((value) => value === arrayElement) === false) {
+      randomArray.push(arrayElement);
+    }
   }
 
   return randomArray;
 };
 
 const createPhotoAlbum = () => {
-  const idRandomArray = getIntRandomArray(RANGE_NUMBERS.photoLast);
-  const urlRandomArray = getIntRandomArray(RANGE_NUMBERS.photoLast);
-  const commentsIdRandomArray = getIntRandomArray(RANGE_NUMBERS.commentatorNumber);
+  const commentsIdRandomArray = getIntRandomArray(RANGE_NUMBERS.commentsNumberLast * RANGE_NUMBERS.photoLast);
   const photoAlbum = [];
+  let counter = 0;
 
-  for (let i = 0; i < RANGE_NUMBERS.photoLast; i++) {
-    const photoCard = {
-      id: idRandomArray[i],
-      url: `photos/${urlRandomArray[i]}.jpg`,
-      description: getRandomArrayElement(DESCRIPTION_VALUES),
-      likes: getRandomNumber(RANGE_NUMBERS.likeFirst, RANGE_NUMBERS.likeLast),
-      comments: {
-        id: commentsIdRandomArray[i],
+  const getCommentsMassive = (massiveLength) => {
+    const commentsMassive = [];
+    for (let comment = 0; comment < massiveLength; comment++) {
+      commentsMassive.push({
+        id: commentsIdRandomArray[comment + counter],
         avatar: `img/avatar-${getRandomNumber(RANGE_NUMBERS.avatarFirst, RANGE_NUMBERS.avatarLast)}.svg`,
         message: getRandomArrayElement(MESSEGE_VALUES),
         name: getRandomArrayElement(COMMENTATOR_NAMES)
-      }
+      });
+      counter++;
+    }
+
+    return commentsMassive;
+  };
+
+  for (let card = 0; card < RANGE_NUMBERS.photoLast; card++) {
+    const photoCard = {
+      id: card + 1,
+      url: `photos/${card + 1}.jpg`,
+      description: getRandomArrayElement(DESCRIPTION_VALUES),
+      likes: getRandomNumber(RANGE_NUMBERS.likeFirst, RANGE_NUMBERS.likeLast),
+      comments: getCommentsMassive(getRandomNumber(RANGE_NUMBERS.commentsNumberFirst, RANGE_NUMBERS.commentsNumberLast))
     };
 
-    photoAlbum[i] = photoCard;
+    photoAlbum[card] = photoCard;
   }
 
   return photoAlbum;
 };
-
 
 const checkCommentLength = (phrase, maxLength) => phrase.length <= maxLength;
 
