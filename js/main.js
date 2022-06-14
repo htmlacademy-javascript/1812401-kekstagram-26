@@ -1,15 +1,21 @@
-const RANGE_NUMBERS = {
-  photoFirst: 1,
-  photoLast: 25,
-  likeFirst: 15,
-  likeLast: 200,
-  commentsNumberFirst: 1,
-  commentsNumberLast: 5,
-  avatarFirst: 1,
-  avatarLast: 6,
+const PHOTO_AMOUNT = 25;
+
+const Like = {
+  MIN: 15,
+  MAX: 200
 };
 
-const DESCRIPTION_VALUES = [
+const Comment = {
+  MIN: 1,
+  MAX: 5
+};
+
+const Avatar = {
+  MIN: 1,
+  MAX: 6
+};
+
+const DESCRIPTIONS = [
   'Описание 1',
   'Описание 2',
   'Описание 3',
@@ -17,7 +23,7 @@ const DESCRIPTION_VALUES = [
   'Описание 5'
 ];
 
-const MESSEGE_VALUES = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -26,7 +32,7 @@ const MESSEGE_VALUES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const COMMENTATOR_NAMES = [
+const NAMES = [
   'Имя 1',
   'Имя 2',
   'Имя 3',
@@ -44,58 +50,57 @@ const getRandomNumber = (firstRangeNumber, lastRangeNumber) => {
   return Math.floor(Math.random() * (numberRange + 1) + firstRangeNumber);
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+const getRandomElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-const getIntRandomArray = (arrayLength) => {
-  const randomArray = [];
-  while (randomArray.length < arrayLength) {
-    const arrayElement = getRandomNumber(1, arrayLength);
-    if (randomArray.some((value) => value === arrayElement) === false) {
-      randomArray.push(arrayElement);
+const getIntRandomItems = (items) => {
+  const randomItems = [];
+  while (randomItems.length < items) {
+    const itemsElement = getRandomNumber(1, items);
+    if (!randomItems.some((value) => value === itemsElement)) {
+      randomItems.push(itemsElement);
     }
   }
 
-  return randomArray;
+  return randomItems;
 };
 
-const createPhotoAlbum = () => {
-  const commentsIdRandomArray = getIntRandomArray(RANGE_NUMBERS.commentsNumberLast * RANGE_NUMBERS.photoLast);
-  const photoAlbum = [];
+const createPhotos = (photosAmount) => {
+  const commentsIdRandomArray = getIntRandomItems(Comment.MAX * photosAmount);
   let counter = 0;
+  let index = 0;
 
-  const getCommentsMassive = (massiveLength) => {
-    const commentsMassive = [];
-    for (let comment = 0; comment < massiveLength; comment++) {
-      commentsMassive.push({
+  const getComments = () => {
+    const comments = [];
+    for (let comment = 0; comment < getRandomNumber(Comment.MIN, Comment.MAX); comment++) {
+      comments.push({
         id: commentsIdRandomArray[comment + counter],
-        avatar: `img/avatar-${getRandomNumber(RANGE_NUMBERS.avatarFirst, RANGE_NUMBERS.avatarLast)}.svg`,
-        message: getRandomArrayElement(MESSEGE_VALUES),
-        name: getRandomArrayElement(COMMENTATOR_NAMES)
+        avatar: `img/avatar-${getRandomNumber(Avatar.MIN, Avatar.MAX)}.svg`,
+        message: getRandomElement(MESSAGES),
+        name: getRandomElement(NAMES)
       });
       counter++;
     }
 
-    return commentsMassive;
+    return comments;
   };
 
-  for (let card = 0; card < RANGE_NUMBERS.photoLast; card++) {
-    const photoCard = {
-      id: card + 1,
-      url: `photos/${card + 1}.jpg`,
-      description: getRandomArrayElement(DESCRIPTION_VALUES),
-      likes: getRandomNumber(RANGE_NUMBERS.likeFirst, RANGE_NUMBERS.likeLast),
-      comments: getCommentsMassive(getRandomNumber(RANGE_NUMBERS.commentsNumberFirst, RANGE_NUMBERS.commentsNumberLast))
+  const photo = () => {
+    index++;
+
+    return {
+      id: index,
+      url: `photos/${index}.jpg`,
+      description: getRandomElement(DESCRIPTIONS),
+      likes: getRandomNumber(Like.MIN, Like.MAX),
+      comments: getComments(getRandomNumber(Comment.MIN, Comment.MAX))
     };
+  };
 
-    photoAlbum[card] = photoCard;
-  }
-
-  return photoAlbum;
+  return Array.from({length: photosAmount}, photo);
 };
 
 const checkCommentLength = (phrase, maxLength) => phrase.length <= maxLength;
 
 // Временный вызов фукций для Lint
-getRandomNumber(1, 2);
 checkCommentLength('Комментарий', 80);
-createPhotoAlbum();
+createPhotos(PHOTO_AMOUNT);
