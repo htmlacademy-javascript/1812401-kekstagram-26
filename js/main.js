@@ -1,4 +1,5 @@
-import {createPhotos} from '/create-photos.js';
+import {createPhotos} from './create-photos.js';
+import {addPhotos} from './add-photos.js';
 
-// Временный вызов фукций для Lint
-createPhotos();
+const photos = createPhotos();
+addPhotos(photos);
