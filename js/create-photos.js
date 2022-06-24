@@ -40,7 +40,8 @@ let counter = 0;
 
 const createComments = (items) => {
   const comments = [];
-  for (let comment = 0; comment < getRandomNumber(Comment.MIN, Comment.MAX); comment++) {
+  const commentNumber = getRandomNumber(Comment.MIN, Comment.MAX);
+  for (let comment = 0; comment < commentNumber; comment++) {
     comments.push({
       id: items[comment + counter],
       avatar: `img/avatar-${getRandomNumber(Avatar.MIN, Avatar.MAX)}.svg`,
