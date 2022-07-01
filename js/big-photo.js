@@ -19,6 +19,8 @@ const openModal = () => {
   bodyElement.classList.add('modal-open');
   bigPhotoElement.classList.remove('hidden');
 
+  document.addEventListener('keydown', onModalEscKeydown);
+  modalCancelElement.addEventListener('click', onModalCloseButtonClick);
 };
 
 const closeModal = () => {
@@ -72,8 +74,6 @@ const showBigPhoto = (photo) => {
   addComments(photo.comments);
 
   openModal();
-  document.addEventListener('keydown', onModalEscKeydown);
-  modalCancelElement.addEventListener('click', onModalCloseButtonClick);
 };
 
-export {showBigPhoto};
+export {showBigPhoto, bodyElement};
