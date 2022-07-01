@@ -1,6 +1,7 @@
 import {createPhotos} from './create-photos.js';
 import {addPhotos} from './add-photos.js';
 import {showBigPhoto} from './big-photo.js';
+import {openImageUploadModal, uploadFileElement} from './form.js';
 
 const photosElement = document.querySelector('.pictures');
 const photos = createPhotos();
@@ -19,3 +20,4 @@ const onPictureClick = (evt) => {
 };
 
 photosElement.addEventListener('click', onPictureClick);
+uploadFileElement.addEventListener('change', openImageUploadModal);
