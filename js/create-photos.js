@@ -7,7 +7,7 @@ const Like = {
 };
 const Comment = {
   MIN: 1,
-  MAX: 5
+  MAX: 15
 };
 const Avatar = {
   MIN: 1,

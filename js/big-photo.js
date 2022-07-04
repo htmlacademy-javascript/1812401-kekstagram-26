@@ -1,6 +1,8 @@
+const SHOWN_COMMENTS_NUMBER = 5;
+
 const bigPhotoElement = document.querySelector('.big-picture');
 const bodyElement =  document.querySelector('body');
-const commentCountElement = bigPhotoElement.querySelector('.social__comment-count');
+const commentCountShownElement = bigPhotoElement.querySelector('.comments-count-shown');
 const commentsLoaderElement = bigPhotoElement.querySelector('.comments-loader');
 const commentsElement = bigPhotoElement.querySelector('.social__comments');
 const modalCancelElement = bigPhotoElement.querySelector('.big-picture__cancel');
@@ -10,10 +12,6 @@ const commentsCountElement = bigPhotoElement.querySelector('.comments-count');
 const captionElement = bigPhotoElement.querySelector('.social__caption');
 const commentTemplate = document.querySelector('#comment').content;
 const commentsContainerElement = document.querySelector('.social__comments');
-
-// Временное добавление hidden
-commentCountElement.classList.add('hidden');
-commentsLoaderElement.classList.add('hidden');
 
 const openModal = () => {
   bodyElement.classList.add('modal-open');
@@ -29,6 +27,7 @@ const closeModal = () => {
 
   document.removeEventListener('keydown', onModalEscKeydown);
   modalCancelElement.removeEventListener('click', onModalCloseButtonClick);
+  commentsLoaderElement.classList.remove('hidden');
 };
 
 function onModalEscKeydown (evt) {
@@ -53,7 +52,7 @@ const getCommentElement = ({avatar, name, message}) => {
   return element;
 };
 
-const addComments = (comments) => {
+const addCommentsList = (comments) => {
   const commentsFragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
@@ -62,6 +61,35 @@ const addComments = (comments) => {
   });
 
   commentsContainerElement.append(commentsFragment);
+};
+
+const addComments = (comments) => {
+  let commentsCounter = SHOWN_COMMENTS_NUMBER;
+  const defaultComments = comments.slice(0, SHOWN_COMMENTS_NUMBER);
+
+  commentCountShownElement.textContent = defaultComments.length;
+  addCommentsList(defaultComments);
+  if (comments.length <= SHOWN_COMMENTS_NUMBER) {
+    commentsLoaderElement.classList.add('hidden');
+    return;
+  }
+
+  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
+
+  function onShowMoreCommentsButtonClick () {
+    if (commentsCounter >= comments.length) {
+      return;
+    }
+    const commentsItems = comments.slice(commentsCounter, commentsCounter + SHOWN_COMMENTS_NUMBER);
+    commentsCounter += commentsItems.length;
+    commentCountShownElement.textContent = commentsCounter;
+    if (commentsCounter >= comments.length) {
+      commentsLoaderElement.classList.add('hidden');
+      commentsLoaderElement.removeEventListener('click', onShowMoreCommentsButtonClick);
+    }
+
+    addCommentsList(commentsItems);
+  }
 };
 
 const showBigPhoto = (photo) => {

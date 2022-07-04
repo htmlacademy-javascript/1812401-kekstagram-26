@@ -1,6 +1,7 @@
 import {bodyElement} from './big-photo.js';
 
 const formElement = document.querySelector('.img-upload__form');
+const formElements = formElement.querySelectorAll('fieldset');
 const uploadFileElement = formElement.querySelector('#upload-file');
 const imageUploadElement = formElement.querySelector('.img-upload__overlay');
 const uploadCancelButtonElement = formElement.querySelector('#upload-cancel');
@@ -27,7 +28,7 @@ const closeModal = () => {
 
   document.removeEventListener('keydown', onModalEscKeydown);
   uploadCancelButtonElement.removeEventListener('click', onModalCloseButtonClick);
-  uploadFileElement.value = '';
+  formElements.forEach((element) => element.reset());
 };
 
 function onModalEscKeydown (evt) {
