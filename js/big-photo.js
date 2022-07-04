@@ -13,12 +13,32 @@ const captionElement = bigPhotoElement.querySelector('.social__caption');
 const commentTemplate = document.querySelector('#comment').content;
 const commentsContainerElement = document.querySelector('.social__comments');
 
+const getHiddenComments = () => {
+  const commentsListElement = bigPhotoElement.querySelectorAll('.social__comment');
+
+  if (commentsListElement.length <= SHOWN_COMMENTS_NUMBER) {
+    commentsLoaderElement.classList.add('hidden');
+    commentCountShownElement.textContent = commentsListElement.length;
+    return;
+  }
+
+  commentsListElement.forEach((element, index) => {
+    if (index >= SHOWN_COMMENTS_NUMBER) {
+      element.classList.add('hidden');
+      commentCountShownElement.textContent = SHOWN_COMMENTS_NUMBER;
+    }
+  });
+  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
+};
+
 const openModal = () => {
   bodyElement.classList.add('modal-open');
   bigPhotoElement.classList.remove('hidden');
 
   document.addEventListener('keydown', onModalEscKeydown);
   modalCancelElement.addEventListener('click', onModalCloseButtonClick);
+
+  getHiddenComments();
 };
 
 const closeModal = () => {
@@ -28,6 +48,7 @@ const closeModal = () => {
   document.removeEventListener('keydown', onModalEscKeydown);
   modalCancelElement.removeEventListener('click', onModalCloseButtonClick);
   commentsLoaderElement.classList.remove('hidden');
+  commentsLoaderElement.removeEventListener('click', onShowMoreCommentsButtonClick);
 };
 
 function onModalEscKeydown (evt) {
@@ -41,6 +62,31 @@ function onModalCloseButtonClick () {
   closeModal();
 }
 
+function onShowMoreCommentsButtonClick () {
+  const hiddenCommentsElements = commentsElement.querySelectorAll('.hidden');
+  const hiddenCommentsNumber = hiddenCommentsElements.length;
+  const commentsNumber = commentsElement.children.length - hiddenCommentsNumber;
+  let hiddenCounter = 0;
+
+  if (SHOWN_COMMENTS_NUMBER <= hiddenCommentsNumber) {
+    for (let i = 0; i < SHOWN_COMMENTS_NUMBER; i++) {
+      hiddenCommentsElements[i].classList.remove('hidden');
+      hiddenCounter++;
+    }
+    commentCountShownElement.textContent = commentsNumber + hiddenCounter;
+
+    if (commentsElement.children.length === commentsNumber + hiddenCounter) {
+      commentsLoaderElement.classList.add('hidden');
+    }
+
+    return;
+  }
+
+  hiddenCommentsElements.forEach((element) => element.classList.remove('hidden'));
+  commentCountShownElement.textContent = commentsElement.children.length;
+  commentsLoaderElement.classList.add('hidden');
+}
+
 const removeComments = () => (commentsElement.innerHTML = '');
 
 const getCommentElement = ({avatar, name, message}) => {
@@ -52,7 +98,7 @@ const getCommentElement = ({avatar, name, message}) => {
   return element;
 };
 
-const addCommentsList = (comments) => {
+const addComments = (comments) => {
   const commentsFragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
@@ -61,35 +107,6 @@ const addCommentsList = (comments) => {
   });
 
   commentsContainerElement.append(commentsFragment);
-};
-
-const addComments = (comments) => {
-  let commentsCounter = SHOWN_COMMENTS_NUMBER;
-  const defaultComments = comments.slice(0, SHOWN_COMMENTS_NUMBER);
-
-  commentCountShownElement.textContent = defaultComments.length;
-  addCommentsList(defaultComments);
-  if (comments.length <= SHOWN_COMMENTS_NUMBER) {
-    commentsLoaderElement.classList.add('hidden');
-    return;
-  }
-
-  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
-
-  function onShowMoreCommentsButtonClick () {
-    if (commentsCounter >= comments.length) {
-      return;
-    }
-    const commentsItems = comments.slice(commentsCounter, commentsCounter + SHOWN_COMMENTS_NUMBER);
-    commentsCounter += commentsItems.length;
-    commentCountShownElement.textContent = commentsCounter;
-    if (commentsCounter >= comments.length) {
-      commentsLoaderElement.classList.add('hidden');
-      commentsLoaderElement.removeEventListener('click', onShowMoreCommentsButtonClick);
-    }
-
-    addCommentsList(commentsItems);
-  }
 };
 
 const showBigPhoto = (photo) => {
