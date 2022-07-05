@@ -1,4 +1,4 @@
-const SHOWN_COMMENTS_NUMBER = 5;
+const SHOWN_COMMENTS_AMOUNT = 5;
 
 const bigPhotoElement = document.querySelector('.big-picture');
 const bodyElement =  document.querySelector('body');
@@ -13,32 +13,12 @@ const captionElement = bigPhotoElement.querySelector('.social__caption');
 const commentTemplate = document.querySelector('#comment').content;
 const commentsContainerElement = document.querySelector('.social__comments');
 
-const getHiddenComments = () => {
-  const commentsListElement = bigPhotoElement.querySelectorAll('.social__comment');
-
-  if (commentsListElement.length <= SHOWN_COMMENTS_NUMBER) {
-    commentsLoaderElement.classList.add('hidden');
-    commentCountShownElement.textContent = commentsListElement.length;
-    return;
-  }
-
-  commentsListElement.forEach((element, index) => {
-    if (index >= SHOWN_COMMENTS_NUMBER) {
-      element.classList.add('hidden');
-      commentCountShownElement.textContent = SHOWN_COMMENTS_NUMBER;
-    }
-  });
-  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
-};
-
 const openModal = () => {
   bodyElement.classList.add('modal-open');
   bigPhotoElement.classList.remove('hidden');
 
   document.addEventListener('keydown', onModalEscKeydown);
   modalCancelElement.addEventListener('click', onModalCloseButtonClick);
-
-  getHiddenComments();
 };
 
 const closeModal = () => {
@@ -64,27 +44,24 @@ function onModalCloseButtonClick () {
 
 function onShowMoreCommentsButtonClick () {
   const hiddenCommentsElements = commentsElement.querySelectorAll('.hidden');
-  const hiddenCommentsNumber = hiddenCommentsElements.length;
-  const commentsNumber = commentsElement.children.length - hiddenCommentsNumber;
-  let hiddenCounter = 0;
+  const hiddenCommentsAmount = hiddenCommentsElements.length;
+  const commentsAmount = commentsElement.querySelectorAll('.social__comment').length;
+  const shownCommentsAmount = commentsAmount - hiddenCommentsAmount;
 
-  if (SHOWN_COMMENTS_NUMBER <= hiddenCommentsNumber) {
-    for (let i = 0; i < SHOWN_COMMENTS_NUMBER; i++) {
-      hiddenCommentsElements[i].classList.remove('hidden');
-      hiddenCounter++;
-    }
-    commentCountShownElement.textContent = commentsNumber + hiddenCounter;
-
-    if (commentsElement.children.length === commentsNumber + hiddenCounter) {
-      commentsLoaderElement.classList.add('hidden');
-    }
+  if (hiddenCommentsAmount <= SHOWN_COMMENTS_AMOUNT) {
+    hiddenCommentsElements.forEach((element) => {
+      element.classList.remove('hidden');
+    });
+    commentCountShownElement.textContent = commentsAmount;
+    commentsLoaderElement.classList.add('hidden');
 
     return;
   }
 
-  hiddenCommentsElements.forEach((element) => element.classList.remove('hidden'));
-  commentCountShownElement.textContent = commentsElement.children.length;
-  commentsLoaderElement.classList.add('hidden');
+  for (let i = 0; i < SHOWN_COMMENTS_AMOUNT; i++) {
+    hiddenCommentsElements[i].classList.remove('hidden');
+  }
+  commentCountShownElement.textContent = shownCommentsAmount + SHOWN_COMMENTS_AMOUNT;
 }
 
 const removeComments = () => (commentsElement.innerHTML = '');
@@ -101,12 +78,27 @@ const getCommentElement = ({avatar, name, message}) => {
 const addComments = (comments) => {
   const commentsFragment = document.createDocumentFragment();
 
-  comments.forEach((comment) => {
+  comments.forEach((comment, index) => {
     const commentElement = getCommentElement(comment);
+    if (index > SHOWN_COMMENTS_AMOUNT - 1) {
+      commentElement.querySelector('.social__comment').classList.add('hidden');
+    }
     commentsFragment.append(commentElement);
   });
 
   commentsContainerElement.append(commentsFragment);
+
+  const commentsListElement = commentsElement.querySelectorAll('.social__comment');
+
+  if (commentsListElement.length <= SHOWN_COMMENTS_AMOUNT) {
+    commentsLoaderElement.classList.add('hidden');
+    commentCountShownElement.textContent = commentsListElement.length;
+
+    return;
+  }
+
+  commentCountShownElement.textContent = SHOWN_COMMENTS_AMOUNT;
+  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
 };
 
 const showBigPhoto = (photo) => {
