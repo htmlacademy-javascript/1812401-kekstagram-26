@@ -13,37 +13,37 @@ const previewImage = formElement.querySelector('.img-upload__preview').querySele
 const scaleValue = () => parseInt(scaleValueElement.value, 10);
 
 const changeScale = () => {
-  scaleDownButtonElement.addEventListener('click', scaleDown);
-  scaleUpButtonElement.addEventListener('click', scaleUp);
+  scaleDownButtonElement.addEventListener('click', onScaleDownButtonClick);
+  scaleUpButtonElement.addEventListener('click', onScaleUpButtonClick);
 };
 
-function scaleDown () {
+function onScaleDownButtonClick () {
   scaleUpButtonElement.disabled = false;
   if (scaleValue() <= Scale.MIN) {
     scaleDownButtonElement.disabled = true;
   } else {
-    const transformScaleValue = (scaleValue() - Scale.STEP)/100;
+    const transformScaleValue = (scaleValue() - Scale.STEP) / 100;
     scaleDownButtonElement.disabled = false;
     scaleValueElement.value = `${scaleValue() - Scale.STEP}%`;
-    previewImage.style = `transform: scale(${transformScaleValue})`;
+    previewImage.style.transform = `scale(${transformScaleValue})`;
   }
 }
 
-function scaleUp () {
+function onScaleUpButtonClick () {
   scaleDownButtonElement.disabled = false;
   if (scaleValue() >= Scale.MAX) {
     scaleUpButtonElement.disabled = true;
   } else {
-    const transformScaleValue = (scaleValue() + Scale.STEP)/100;
+    const transformScaleValue = (scaleValue() + Scale.STEP) / 100;
     scaleUpButtonElement.disabled = false;
     scaleValueElement.value = `${scaleValue() + Scale.STEP}%`;
-    previewImage.style = `transform: scale(${transformScaleValue})`;
+    previewImage.style.transform = `scale(${transformScaleValue})`;
   }
 }
 
 const resetScale = () => {
-  scaleDownButtonElement.removeEventListener('click', scaleDown);
-  scaleUpButtonElement.removeEventListener('click', scaleUp);
+  scaleDownButtonElement.removeEventListener('click', onScaleDownButtonClick);
+  scaleUpButtonElement.removeEventListener('click', onScaleUpButtonClick);
   previewImage.removeAttribute('style');
 };
 
