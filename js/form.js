@@ -1,7 +1,8 @@
 import {bodyElement} from './big-photo.js';
+import {changeScale} from './scale.js';
+import {resetScale} from './scale.js';
 
 const formElement = document.querySelector('.img-upload__form');
-const formElements = formElement.querySelectorAll('fieldset');
 const uploadFileElement = formElement.querySelector('#upload-file');
 const imageUploadElement = formElement.querySelector('.img-upload__overlay');
 const uploadCancelButtonElement = formElement.querySelector('#upload-cancel');
@@ -18,6 +19,8 @@ const openImageUploadModal = () => {
   imageUploadElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
 
+  changeScale();
+
   document.addEventListener('keydown', onModalEscKeydown);
   uploadCancelButtonElement.addEventListener('click', onModalCloseButtonClick);
 };
@@ -28,7 +31,8 @@ const closeModal = () => {
 
   document.removeEventListener('keydown', onModalEscKeydown);
   uploadCancelButtonElement.removeEventListener('click', onModalCloseButtonClick);
-  formElements.forEach((element) => element.reset());
+  formElement.reset();
+  resetScale();
 };
 
 function onModalEscKeydown (evt) {

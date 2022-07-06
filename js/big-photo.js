@@ -54,14 +54,12 @@ function onShowMoreCommentsButtonClick () {
     });
     commentCountShownElement.textContent = commentsAmount;
     commentsLoaderElement.classList.add('hidden');
-
-    return;
+  } else {
+    for (let i = 0; i < SHOWN_COMMENTS_AMOUNT; i++) {
+      hiddenCommentsElements[i].classList.remove('hidden');
+    }
+    commentCountShownElement.textContent = shownCommentsAmount + SHOWN_COMMENTS_AMOUNT;
   }
-
-  for (let i = 0; i < SHOWN_COMMENTS_AMOUNT; i++) {
-    hiddenCommentsElements[i].classList.remove('hidden');
-  }
-  commentCountShownElement.textContent = shownCommentsAmount + SHOWN_COMMENTS_AMOUNT;
 }
 
 const removeComments = () => (commentsElement.innerHTML = '');
@@ -93,12 +91,10 @@ const addComments = (comments) => {
   if (commentsListElement.length <= SHOWN_COMMENTS_AMOUNT) {
     commentsLoaderElement.classList.add('hidden');
     commentCountShownElement.textContent = commentsListElement.length;
-
-    return;
+  } else {
+    commentCountShownElement.textContent = SHOWN_COMMENTS_AMOUNT;
+    commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
   }
-
-  commentCountShownElement.textContent = SHOWN_COMMENTS_AMOUNT;
-  commentsLoaderElement.addEventListener('click', onShowMoreCommentsButtonClick);
 };
 
 const showBigPhoto = (photo) => {
