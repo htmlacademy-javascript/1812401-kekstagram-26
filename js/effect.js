@@ -48,7 +48,7 @@ noUiSlider.create(sliderElement, {
   format: {
     to: function (value) {
       if (Number.isInteger(value)) {
-        return value.toFixed(0);
+        return value;
       }
       return value.toFixed(1);
     },
@@ -82,8 +82,8 @@ function onEffectIconClick (evt) {
 
     previewImage.removeAttribute('class');
     previewImage.classList.add(`effects__preview--${effectName}`);
-    previewImage.style.filter = `${effectStyle}(${Effect[effectName].MAX})`;
     sliderElement.classList.remove('hidden');
+    previewImage.style.filter = `${effectStyle}(${Effect[effectName].MAX})`;
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: Effect[effectName].MIN,
