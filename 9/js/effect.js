@@ -33,6 +33,7 @@ const Effect = {
 
 const formElement = document.querySelector('.img-upload__form');
 const effectsListElement =  formElement.querySelector('.effects__list');
+const sliderContainerElement = formElement.querySelector('.img-upload__effect-level');
 const sliderElement = formElement.querySelector('.effect-level__slider');
 const sliderValueElement = formElement.querySelector('.effect-level__value');
 const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
@@ -48,7 +49,7 @@ noUiSlider.create(sliderElement, {
   format: {
     to: function (value) {
       if (Number.isInteger(value)) {
-        return value.toFixed(0);
+        return value;
       }
       return value.toFixed(1);
     },
@@ -58,15 +59,13 @@ noUiSlider.create(sliderElement, {
   },
 });
 
-const changeEffect = () => effectsListElement.addEventListener('change', onEffectIconClick);
-
-function onEffectIconClick (evt) {
+const onEffectClick = (evt) => {
   previewImage.removeAttribute('class');
   if (evt.target.id === 'effect-none') {
-    sliderElement.classList.add('hidden');
+    sliderContainerElement.classList.add('hidden');
     previewImage.style.filter = 'none';
   } else {
-    const effectName = evt.target.id.slice(7);
+    const effectName = evt.target.id.replace(/effect-/, '');
     const effectStyle = Effect[effectName].FILTER;
 
     sliderElement.noUiSlider.on('update', () => {
@@ -82,8 +81,8 @@ function onEffectIconClick (evt) {
 
     previewImage.removeAttribute('class');
     previewImage.classList.add(`effects__preview--${effectName}`);
+    sliderContainerElement.classList.remove('hidden');
     previewImage.style.filter = `${effectStyle}(${Effect[effectName].MAX})`;
-    sliderElement.classList.remove('hidden');
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: Effect[effectName].MIN,
@@ -93,11 +92,14 @@ function onEffectIconClick (evt) {
       step: Effect[effectName].STEP
     });
   }
-}
+};
+
+const changeEffect = () => effectsListElement.addEventListener('change', onEffectClick);
 
 const resetEffects = () => {
-  effectsListElement.removeEventListener('change', onEffectIconClick);
-  sliderElement.classList.add('hidden');
+  effectsListElement.removeEventListener('change', onEffectClick);
+  sliderContainerElement.classList.add('hidden');
+  previewImage.removeAttribute('class');
 };
 
 export {changeEffect, resetEffects};
