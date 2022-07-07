@@ -10,40 +10,36 @@ const scaleDownButtonElement = formElement.querySelector('.scale__control--small
 const scaleUpButtonElement = formElement.querySelector('.scale__control--bigger');
 const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
 
-const scaleValue = () => parseInt(scaleValueElement.value, 10);
+const getScaleValue = () => parseInt(scaleValueElement.value, 10);
 
-const changeScale = () => {
-  scaleDownButtonElement.addEventListener('click', onScaleDownButtonClick);
-  scaleUpButtonElement.addEventListener('click', onScaleUpButtonClick);
+const onScaleButtonClick = (evt) => {
+  const scaleElement = evt.target;
+  let scaleValue = 0;
+  if (scaleElement.classList.contains('scale__control--smaller')) {
+    scaleUpButtonElement.disabled = false;
+    scaleValue = getScaleValue() - Scale.STEP;
+  } else {
+    scaleDownButtonElement.disabled = false;
+    scaleValue = getScaleValue() + Scale.STEP;
+  }
+  if (scaleValue < Scale.MIN || scaleValue > Scale.MAX) {
+    scaleElement.disabled = true;
+  } else {
+    const transformScaleValue = scaleValue / 100;
+    scaleElement.disabled = false;
+    scaleValueElement.value = `${scaleValue}%`;
+    previewImage.style.transform = `scale(${transformScaleValue})`;
+  }
 };
 
-function onScaleDownButtonClick () {
-  scaleUpButtonElement.disabled = false;
-  if (scaleValue() <= Scale.MIN) {
-    scaleDownButtonElement.disabled = true;
-  } else {
-    const transformScaleValue = (scaleValue() - Scale.STEP) / 100;
-    scaleDownButtonElement.disabled = false;
-    scaleValueElement.value = `${scaleValue() - Scale.STEP}%`;
-    previewImage.style.transform = `scale(${transformScaleValue})`;
-  }
-}
-
-function onScaleUpButtonClick () {
-  scaleDownButtonElement.disabled = false;
-  if (scaleValue() >= Scale.MAX) {
-    scaleUpButtonElement.disabled = true;
-  } else {
-    const transformScaleValue = (scaleValue() + Scale.STEP) / 100;
-    scaleUpButtonElement.disabled = false;
-    scaleValueElement.value = `${scaleValue() + Scale.STEP}%`;
-    previewImage.style.transform = `scale(${transformScaleValue})`;
-  }
-}
+const changeScale = () => {
+  scaleDownButtonElement.addEventListener('click', onScaleButtonClick);
+  scaleUpButtonElement.addEventListener('click', onScaleButtonClick);
+};
 
 const resetScale = () => {
-  scaleDownButtonElement.removeEventListener('click', onScaleDownButtonClick);
-  scaleUpButtonElement.removeEventListener('click', onScaleUpButtonClick);
+  scaleDownButtonElement.removeEventListener('click', onScaleButtonClick);
+  scaleUpButtonElement.removeEventListener('click', onScaleButtonClick);
   previewImage.removeAttribute('style');
 };
 
