@@ -13,6 +13,26 @@ const captionElement = bigPhotoElement.querySelector('.social__caption');
 const commentTemplate = document.querySelector('#comment').content;
 const commentsContainerElement = document.querySelector('.social__comments');
 
+const onShowMoreCommentsButtonClick = () => {
+  const hiddenCommentsElements = commentsElement.querySelectorAll('.hidden');
+  const hiddenCommentsAmount = hiddenCommentsElements.length;
+  const commentsAmount = commentsElement.querySelectorAll('.social__comment').length;
+  const shownCommentsAmount = commentsAmount - hiddenCommentsAmount;
+
+  if (hiddenCommentsAmount <= SHOWN_COMMENTS_AMOUNT) {
+    hiddenCommentsElements.forEach((element) => {
+      element.classList.remove('hidden');
+    });
+    commentCountShownElement.textContent = commentsAmount;
+    commentsLoaderElement.classList.add('hidden');
+  } else {
+    for (let i = 0; i < SHOWN_COMMENTS_AMOUNT; i++) {
+      hiddenCommentsElements[i].classList.remove('hidden');
+    }
+    commentCountShownElement.textContent = shownCommentsAmount + SHOWN_COMMENTS_AMOUNT;
+  }
+};
+
 const openModal = () => {
   bodyElement.classList.add('modal-open');
   bigPhotoElement.classList.remove('hidden');
@@ -40,26 +60,6 @@ function onModalEscKeydown (evt) {
 
 function onModalCloseButtonClick () {
   closeModal();
-}
-
-function onShowMoreCommentsButtonClick () {
-  const hiddenCommentsElements = commentsElement.querySelectorAll('.hidden');
-  const hiddenCommentsAmount = hiddenCommentsElements.length;
-  const commentsAmount = commentsElement.querySelectorAll('.social__comment').length;
-  const shownCommentsAmount = commentsAmount - hiddenCommentsAmount;
-
-  if (hiddenCommentsAmount <= SHOWN_COMMENTS_AMOUNT) {
-    hiddenCommentsElements.forEach((element) => {
-      element.classList.remove('hidden');
-    });
-    commentCountShownElement.textContent = commentsAmount;
-    commentsLoaderElement.classList.add('hidden');
-  } else {
-    for (let i = 0; i < SHOWN_COMMENTS_AMOUNT; i++) {
-      hiddenCommentsElements[i].classList.remove('hidden');
-    }
-    commentCountShownElement.textContent = shownCommentsAmount + SHOWN_COMMENTS_AMOUNT;
-  }
 }
 
 const removeComments = () => (commentsElement.innerHTML = '');
