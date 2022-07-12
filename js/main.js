@@ -1,7 +1,7 @@
 import {getPhotos} from './network.js';
 import {addPhotos} from './add-photos.js';
 import {showBigPhoto} from './big-photo.js';
-import {openImageUploadModal, setUserFormSubmit, closeModal, uploadFileElement} from './form.js';
+import {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement} from './form.js';
 
 getPhotos((photos) => {
   const photosElement = document.querySelector('.pictures');
@@ -21,7 +21,7 @@ getPhotos((photos) => {
   };
 
   photosElement.addEventListener('click', onPictureClick);
-  uploadFileElement.addEventListener('change', openImageUploadModal);
+  uploadFileElement.addEventListener('change', onImageLoadElementClick);
 });
 
 setUserFormSubmit(closeModal);

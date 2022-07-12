@@ -7,6 +7,7 @@ const errorTemplate = document.querySelector('#error').content;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
+  alertContainer.classList.add('alert-container');
   alertContainer.style.zIndex = '10';
   alertContainer.style.position = 'absolute';
   alertContainer.style.left = '0';
@@ -16,7 +17,6 @@ const showAlert = (message) => {
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = '#FA8072';
-
   alertContainer.textContent = message;
 
   document.body.append(alertContainer);
@@ -38,27 +38,23 @@ const onCloseButtonClick = () => {
 };
 
 const onMessageOutAreaClick = (evt) => {
-  if (evt.target === bodyElement.querySelector('.success') || evt.target === bodyElement.querySelector('.error')) {
+  if (evt.target === bodyElement.querySelector('.message-modal')) {
     closeSendFormMessage();
   }
 };
 
-const showSendFormMessage = (message) => {
-  const messageFragment = document.createDocumentFragment();
-
-  let messageElement = [];
+const showMessageModal = (message) => {
+  let messageElement;
   if (message === 'success') {
     messageElement = successTemplate.cloneNode(true);
     document.addEventListener('keydown', onMessageEscKeydown);
   } else {
     messageElement = errorTemplate.cloneNode(true);
-    messageElement.querySelector('.error').style.zIndex = 10;
   }
   document.addEventListener('click', onMessageOutAreaClick);
   messageElement.querySelector('button').addEventListener('click', onCloseButtonClick);
-  messageFragment.append(messageElement);
 
-  bodyElement.append(messageFragment);
+  bodyElement.append(messageElement);
 };
 
 function closeSendFormMessage () {
@@ -75,4 +71,4 @@ function closeSendFormMessage () {
   document.removeEventListener('click', onMessageOutAreaClick);
 }
 
-export {showAlert, showSendFormMessage};
+export {showAlert, showMessageModal as showSendFormMessage};

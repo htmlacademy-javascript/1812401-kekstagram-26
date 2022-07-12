@@ -3,6 +3,8 @@ import {changeScale, resetScale} from './scale.js';
 import {changeEffect, resetEffects} from './effect.js';
 import {sendData} from './network.js';
 
+const HASHTAG_AMOUNT = 5;
+
 const formElement = document.querySelector('.img-upload__form');
 const uploadFileElement = formElement.querySelector('#upload-file');
 const imageUploadElement = formElement.querySelector('.img-upload__overlay');
@@ -17,7 +19,7 @@ const pristine = new Pristine(formElement, {
   errorTextClass: 'img-upload__error'
 });
 
-const openImageUploadModal = () => {
+const onImageLoadElementClick = () => {
   imageUploadElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
 
@@ -65,9 +67,15 @@ const getHashtags = () => hashtagsInputElement.value.toLowerCase().split(' ');
 
 pristine.addValidator(hashtagsInputElement, () => {
   const hashtagsItems = getHashtags();
-  if (hashtagsItems.length > 5 ||
-    hashtagsItems.some((tag, index) => hashtagsItems.indexOf(tag) !== index) ||
-    hashtagsItems[0] !== '' && hashtagsItems.some((tag) => !re.test(tag))) {
+  const verifyHashtagAmount = () => hashtagsItems.length > HASHTAG_AMOUNT;
+  const searchSameHashtag = () => hashtagsItems.some((tag, index) => hashtagsItems.indexOf(tag) !== index);
+  const verifySpaceIsFirst = () => hashtagsItems[0] === '' && hashtagsItems.length > 1;
+  const searchHashtagGrammarError = () => hashtagsItems[0] !== '' && hashtagsItems.some((tag) => !re.test(tag));
+
+  if (verifyHashtagAmount() ||
+    searchSameHashtag() ||
+    verifySpaceIsFirst() ||
+    searchHashtagGrammarError()) {
     submitButtonElement.disabled = true;
     return false;
   }
@@ -101,10 +109,10 @@ const setUserFormSubmit = (onSuccess) => {
         () => {
           unblockSubmitButton();
         },
-        new FormData(evt.target),
+        new FormData(formElement),
       );
     }
   });
 };
 
-export {openImageUploadModal, setUserFormSubmit, closeModal, uploadFileElement, formElement};
+export {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement, formElement};
