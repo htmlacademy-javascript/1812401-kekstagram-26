@@ -1,4 +1,4 @@
-import {showAlert, showSendFormMessage} from './message.js';
+import {showAlert, showMessageModal} from './message.js';
 
 const DATA_LOAD_ERROR = 'Для получения данных оплатите обращение к серверу';
 const KEKSTAGRAM_SERVER = 'https://26.javascript.pages.academy/kekstagram';
@@ -25,13 +25,13 @@ const sendData = (onSuccess, onFail, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
-        showSendFormMessage('success');
+        showMessageModal('success');
       } else {
-        onFail(showSendFormMessage('notsuccess'));
+        onFail(showMessageModal('notsuccess'));
       }
     })
     .catch(() => {
-      onFail(showSendFormMessage('notsuccess'));
+      onFail(showMessageModal('notsuccess'));
     });
 };
 

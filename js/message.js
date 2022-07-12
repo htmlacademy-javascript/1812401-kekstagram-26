@@ -29,17 +29,17 @@ const showAlert = (message) => {
 const onMessageEscKeydown = (evt) => {
   if (evt.key === 'Escape' && bodyElement.querySelector('.success')) {
     evt.preventDefault();
-    closeSendFormMessage();
+    closeMessageModal();
   }
 };
 
 const onCloseButtonClick = () => {
-  closeSendFormMessage();
+  closeMessageModal();
 };
 
 const onMessageOutAreaClick = (evt) => {
   if (evt.target === bodyElement.querySelector('.message-modal')) {
-    closeSendFormMessage();
+    closeMessageModal();
   }
 };
 
@@ -57,7 +57,7 @@ const showMessageModal = (message) => {
   bodyElement.append(messageElement);
 };
 
-function closeSendFormMessage () {
+function closeMessageModal () {
   const sendSuccessElement = bodyElement.querySelector('.success');
   const sendErrorElement = bodyElement.querySelector('.error');
 
@@ -71,4 +71,4 @@ function closeSendFormMessage () {
   document.removeEventListener('click', onMessageOutAreaClick);
 }
 
-export {showAlert, showMessageModal as showSendFormMessage};
+export {showAlert, showMessageModal};
