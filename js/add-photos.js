@@ -4,7 +4,7 @@ const photoTemplate = document.querySelector('#picture').content;
 const getPhotoElement = ({url, id, likes, comments}) => {
   const element = photoTemplate.cloneNode(true);
   element.querySelector('.picture__img').src = url;
-  element.querySelector('.picture__img').dataset.id = id - 1;
+  element.querySelector('.picture__img').dataset.id = id;
   element.querySelector('.picture__likes').textContent = likes;
   element.querySelector('.picture__comments').textContent = comments.length;
 
