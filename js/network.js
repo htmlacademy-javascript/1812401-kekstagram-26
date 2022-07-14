@@ -27,11 +27,11 @@ const sendData = (onSuccess, onFail, body) => {
         onSuccess();
         showMessageModal('success');
       } else {
-        onFail(showMessageModal('notsuccess'));
+        onFail(showMessageModal('error'));
       }
     })
     .catch(() => {
-      onFail(showMessageModal('notsuccess'));
+      onFail(showMessageModal('error'));
     });
 };
 
