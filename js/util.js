@@ -22,9 +22,29 @@ const getRandomIntegers = (items) => {
   return randomItems;
 };
 
+const getRandomPhotos = (photosArray, length) => {
+  const randomPhotos = [];
+  while (randomPhotos.length < length) {
+    const photo = getRandomElement(photosArray);
+    if (!randomPhotos.some((element) => element.id === photo.id)) {
+      randomPhotos.push(photo);
+    }
+  }
+
+  return randomPhotos;
+};
+
 const checkCommentLength = (phrase, maxLength) => phrase.length <= maxLength;
 
-export {getRandomNumber, getRandomElement, getRandomIntegers};
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {getRandomNumber, getRandomElement, getRandomIntegers, getRandomPhotos, debounce};
 
 // Временный вызов фукций для Lint
 checkCommentLength('Комментарий', 80);

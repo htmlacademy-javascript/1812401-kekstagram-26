@@ -1,5 +1,6 @@
 const photosContainerElement = document.querySelector('.pictures');
 const photoTemplate = document.querySelector('#picture').content;
+const imageFiltersElement = document.querySelector('.img-filters');
 
 const getPhotoElement = ({url, id, likes, comments}) => {
   const element = photoTemplate.cloneNode(true);
@@ -20,6 +21,7 @@ const addPhotos = (photos) => {
   });
 
   photosContainerElement.append(photosFragment);
+  imageFiltersElement.classList.remove('img-filters--inactive');
 };
 
-export {addPhotos};
+export {addPhotos, imageFiltersElement};
