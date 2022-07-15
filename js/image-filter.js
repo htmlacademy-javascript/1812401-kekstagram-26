@@ -3,11 +3,11 @@ import {getRandomPhotos} from './util.js';
 
 const RANDOM_PICTURES_AMOUNT = 10;
 
-const imageFiltersButtonsElement = imageFiltersElement.querySelector('.img-filters__form');
-const imageFiltersButtonElements = imageFiltersButtonsElement.querySelectorAll('.img-filters__button');
-const defaultFilterElement = imageFiltersButtonsElement.querySelector('#filter-default');
-const randomFilterElement = imageFiltersButtonsElement.querySelector('#filter-random');
-const discussedFilterElement = imageFiltersButtonsElement.querySelector('#filter-discussed');
+const filterFormElement = imageFiltersElement.querySelector('.img-filters__form');
+const filterButtonElements = filterFormElement.querySelectorAll('.img-filters__button');
+const defaultFilterElement = filterFormElement.querySelector('#filter-default');
+const randomFilterElement = filterFormElement.querySelector('#filter-random');
+const discussedFilterElement = filterFormElement.querySelector('#filter-discussed');
 
 const removeImages = () => {
   const photosElements = document.querySelectorAll('.picture');
@@ -16,24 +16,26 @@ const removeImages = () => {
 
 const onFiltersButtonClick = (photos, evt) => {
   const activeFilterElement = evt.target.classList.contains('img-filters__button--active');
+  const photosCopy = photos.slice();
+  let sortedPhotos;
 
   if (activeFilterElement && !randomFilterElement) {
     return;
   }
   removeImages();
-  imageFiltersButtonElements.forEach((element) => element.classList.remove('img-filters__button--active'));
+  filterButtonElements.forEach((element) => element.classList.remove('img-filters__button--active'));
   evt.target.classList.add('img-filters__button--active');
-  if (evt.target === defaultFilterElement) {
-    addPhotos(photos);
+  switch (evt.target) {
+    case defaultFilterElement:
+      sortedPhotos = photos;
+      break;
+    case randomFilterElement:
+      sortedPhotos = getRandomPhotos(photos, RANDOM_PICTURES_AMOUNT);
+      break;
+    case discussedFilterElement:
+      sortedPhotos = photosCopy.sort((a, b) => b.comments.length - a.comments.length);
   }
-  if (evt.target === randomFilterElement) {
-    const randomPhotos = getRandomPhotos(photos, RANDOM_PICTURES_AMOUNT);
-    addPhotos(randomPhotos);
-  }
-  if (evt.target === discussedFilterElement) {
-    const discussedPhotos = photos.slice().sort((a, b) => b.comments.length - a.comments.length);
-    addPhotos(discussedPhotos);
-  }
+  addPhotos(sortedPhotos);
 };
 
-export {onFiltersButtonClick, imageFiltersButtonsElement};
+export {onFiltersButtonClick, filterFormElement};

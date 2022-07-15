@@ -2,7 +2,7 @@ import {getPhotos} from './network.js';
 import {addPhotos} from './add-photos.js';
 import {showBigPhoto} from './big-photo.js';
 import {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement} from './form.js';
-import {onFiltersButtonClick, imageFiltersButtonsElement} from './image-filter.js';
+import {onFiltersButtonClick, filterFormElement} from './image-filter.js';
 import {debounce} from './util.js';
 
 const RERENDER_DELAY = 500;
@@ -27,7 +27,7 @@ getPhotos((photos) => {
 
   photosElement.addEventListener('click', onPictureClick);
   uploadFileElement.addEventListener('change', onImageLoadElementClick);
-  imageFiltersButtonsElement.addEventListener('click', debounce((evt) => onFiltersButtonClick(photosCopy, evt), RERENDER_DELAY));
+  filterFormElement.addEventListener('click', debounce((evt) => onFiltersButtonClick(photosCopy, evt), RERENDER_DELAY));
 });
 
 setUserFormSubmit(closeModal);
