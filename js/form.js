@@ -3,6 +3,7 @@ import {changeScale, resetScale} from './scale.js';
 import {changeEffect, resetEffects} from './effect.js';
 import {sendData} from './network.js';
 
+const FILE_TYPES = ['png', 'jpeg', 'jpg'];
 const HASHTAG_AMOUNT = 5;
 
 const formElement = document.querySelector('.img-upload__form');
@@ -11,6 +12,8 @@ const imageUploadElement = formElement.querySelector('.img-upload__overlay');
 const uploadCancelButtonElement = formElement.querySelector('#upload-cancel');
 const hashtagsInputElement = formElement.querySelector('.text__hashtags');
 const submitButtonElement = formElement.querySelector('.img-upload__submit');
+const imageFileChooser = formElement.querySelector('.img-upload__input');
+const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
 const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 const pristine = new Pristine(formElement, {
@@ -114,5 +117,16 @@ const setUserFormSubmit = (onSuccess) => {
     }
   });
 };
+
+imageFileChooser.addEventListener('change', () => {
+  const file = imageFileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
+
+  if (matches) {
+    previewImage.src = URL.createObjectURL(file);
+  }
+});
 
 export {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement, formElement};
