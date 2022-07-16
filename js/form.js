@@ -23,14 +23,22 @@ const pristine = new Pristine(formElement, {
 });
 
 const onImageLoadElementClick = () => {
-  imageUploadElement.classList.remove('hidden');
-  bodyElement.classList.add('modal-open');
+  const file = imageFileChooser.files[0];
+  const fileName = file.name.toLowerCase();
 
-  changeScale();
-  changeEffect();
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
 
-  document.addEventListener('keydown', onModalEscKeydown);
-  uploadCancelButtonElement.addEventListener('click', onModalCloseButtonClick);
+  if (matches) {
+    previewImage.src = URL.createObjectURL(file);
+    imageUploadElement.classList.remove('hidden');
+    bodyElement.classList.add('modal-open');
+
+    changeScale();
+    changeEffect();
+
+    document.addEventListener('keydown', onModalEscKeydown);
+    uploadCancelButtonElement.addEventListener('click', onModalCloseButtonClick);
+  }
 };
 
 const closeModal = () => {
@@ -117,16 +125,5 @@ const setUserFormSubmit = (onSuccess) => {
     }
   });
 };
-
-imageFileChooser.addEventListener('change', () => {
-  const file = imageFileChooser.files[0];
-  const fileName = file.name.toLowerCase();
-
-  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
-
-  if (matches) {
-    previewImage.src = URL.createObjectURL(file);
-  }
-});
 
 export {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement, formElement};
