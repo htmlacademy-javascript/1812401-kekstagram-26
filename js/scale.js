@@ -8,7 +8,7 @@ const formElement = document.querySelector('.img-upload__form');
 const scaleValueElement = formElement.querySelector('.scale__control--value');
 const scaleDownButtonElement = formElement.querySelector('.scale__control--smaller');
 const scaleUpButtonElement = formElement.querySelector('.scale__control--bigger');
-const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
+const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 
 const getScaleValue = () => parseInt(scaleValueElement.value, 10);
 
@@ -28,7 +28,7 @@ const onScaleButtonClick = (evt) => {
     const transformScaleValue = scaleValue / 100;
     scaleElement.disabled = false;
     scaleValueElement.value = `${scaleValue}%`;
-    previewImage.style.transform = `scale(${transformScaleValue})`;
+    previewImageElement.style.transform = `scale(${transformScaleValue})`;
   }
 };
 
@@ -40,7 +40,7 @@ const changeScale = () => {
 const resetScale = () => {
   scaleDownButtonElement.removeEventListener('click', onScaleButtonClick);
   scaleUpButtonElement.removeEventListener('click', onScaleButtonClick);
-  previewImage.removeAttribute('style');
+  previewImageElement.removeAttribute('style');
 };
 
 export {changeScale, resetScale};

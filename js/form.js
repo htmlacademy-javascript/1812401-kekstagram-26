@@ -3,6 +3,7 @@ import {changeScale, resetScale} from './scale.js';
 import {changeEffect, resetEffects} from './effect.js';
 import {sendData} from './network.js';
 
+const FILE_TYPES = ['png', 'jpeg', 'jpg'];
 const HASHTAG_AMOUNT = 5;
 
 const formElement = document.querySelector('.img-upload__form');
@@ -11,6 +12,8 @@ const imageUploadElement = formElement.querySelector('.img-upload__overlay');
 const uploadCancelButtonElement = formElement.querySelector('#upload-cancel');
 const hashtagsInputElement = formElement.querySelector('.text__hashtags');
 const submitButtonElement = formElement.querySelector('.img-upload__submit');
+const imageFileChooserElement = formElement.querySelector('.img-upload__input');
+const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 const pristine = new Pristine(formElement, {
@@ -20,14 +23,22 @@ const pristine = new Pristine(formElement, {
 });
 
 const onImageLoadElementClick = () => {
-  imageUploadElement.classList.remove('hidden');
-  bodyElement.classList.add('modal-open');
+  const file = imageFileChooserElement.files[0];
+  const fileName = file.name.toLowerCase();
 
-  changeScale();
-  changeEffect();
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
 
-  document.addEventListener('keydown', onModalEscKeydown);
-  uploadCancelButtonElement.addEventListener('click', onModalCloseButtonClick);
+  if (matches) {
+    previewImageElement.src = URL.createObjectURL(file);
+    imageUploadElement.classList.remove('hidden');
+    bodyElement.classList.add('modal-open');
+
+    changeScale();
+    changeEffect();
+
+    document.addEventListener('keydown', onModalEscKeydown);
+    uploadCancelButtonElement.addEventListener('click', onModalCloseButtonClick);
+  }
 };
 
 const closeModal = () => {
