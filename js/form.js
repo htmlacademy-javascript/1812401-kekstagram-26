@@ -12,8 +12,8 @@ const imageUploadElement = formElement.querySelector('.img-upload__overlay');
 const uploadCancelButtonElement = formElement.querySelector('#upload-cancel');
 const hashtagsInputElement = formElement.querySelector('.text__hashtags');
 const submitButtonElement = formElement.querySelector('.img-upload__submit');
-const imageFileChooser = formElement.querySelector('.img-upload__input');
-const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
+const imageFileChooserElement = formElement.querySelector('.img-upload__input');
+const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 const pristine = new Pristine(formElement, {
@@ -23,13 +23,13 @@ const pristine = new Pristine(formElement, {
 });
 
 const onImageLoadElementClick = () => {
-  const file = imageFileChooser.files[0];
+  const file = imageFileChooserElement.files[0];
   const fileName = file.name.toLowerCase();
 
   const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
 
   if (matches) {
-    previewImage.src = URL.createObjectURL(file);
+    previewImageElement.src = URL.createObjectURL(file);
     imageUploadElement.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
 
