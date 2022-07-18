@@ -35,5 +35,4 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-
 export {getPhotos, sendData};

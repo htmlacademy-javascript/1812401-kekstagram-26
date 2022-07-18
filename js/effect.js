@@ -36,7 +36,7 @@ const effectsListElement =  formElement.querySelector('.effects__list');
 const sliderContainerElement = formElement.querySelector('.img-upload__effect-level');
 const sliderElement = formElement.querySelector('.effect-level__slider');
 const sliderValueElement = formElement.querySelector('.effect-level__value');
-const previewImage = formElement.querySelector('.img-upload__preview').querySelector('img');
+const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -60,10 +60,10 @@ noUiSlider.create(sliderElement, {
 });
 
 const onEffectClick = (evt) => {
-  previewImage.removeAttribute('class');
+  previewImageElement.removeAttribute('class');
   if (evt.target.id === 'effect-none') {
     sliderContainerElement.classList.add('hidden');
-    previewImage.style.filter = 'none';
+    previewImageElement.style.filter = 'none';
   } else {
     const effectName = evt.target.id.replace(/effect-/, '');
     const effectStyle = Effect[effectName].FILTER;
@@ -71,18 +71,18 @@ const onEffectClick = (evt) => {
     sliderElement.noUiSlider.on('update', () => {
       sliderValueElement.value = sliderElement.noUiSlider.get();
       if (effectName === 'marvin') {
-        previewImage.style.filter = `${effectStyle}(${sliderValueElement.value}%)`;
+        previewImageElement.style.filter = `${effectStyle}(${sliderValueElement.value}%)`;
       } else if (effectName === 'phobos') {
-        previewImage.style.filter = `${effectStyle}(${sliderValueElement.value}px)`;
+        previewImageElement.style.filter = `${effectStyle}(${sliderValueElement.value}px)`;
       } else {
-        previewImage.style.filter = `${effectStyle}(${sliderValueElement.value})`;
+        previewImageElement.style.filter = `${effectStyle}(${sliderValueElement.value})`;
       }
     });
 
-    previewImage.removeAttribute('class');
-    previewImage.classList.add(`effects__preview--${effectName}`);
+    previewImageElement.removeAttribute('class');
+    previewImageElement.classList.add(`effects__preview--${effectName}`);
     sliderContainerElement.classList.remove('hidden');
-    previewImage.style.filter = `${effectStyle}(${Effect[effectName].MAX})`;
+    previewImageElement.style.filter = `${effectStyle}(${Effect[effectName].MAX})`;
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: Effect[effectName].MIN,
@@ -99,7 +99,7 @@ const changeEffect = () => effectsListElement.addEventListener('change', onEffec
 const resetEffects = () => {
   effectsListElement.removeEventListener('change', onEffectClick);
   sliderContainerElement.classList.add('hidden');
-  previewImage.removeAttribute('class');
+  previewImageElement.removeAttribute('class');
 };
 
 export {changeEffect, resetEffects};
