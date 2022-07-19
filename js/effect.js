@@ -1,3 +1,5 @@
+import {formElement, previewImageElement} from './util.js';
+
 const Effect = {
   chrome: {
     MIN: 0,
@@ -31,12 +33,10 @@ const Effect = {
   },
 };
 
-const formElement = document.querySelector('.img-upload__form');
 const effectsListElement =  formElement.querySelector('.effects__list');
 const sliderContainerElement = formElement.querySelector('.img-upload__effect-level');
 const sliderElement = formElement.querySelector('.effect-level__slider');
 const sliderValueElement = formElement.querySelector('.effect-level__value');
-const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -94,7 +94,7 @@ const onEffectClick = (evt) => {
   }
 };
 
-const changeEffect = () => effectsListElement.addEventListener('change', onEffectClick);
+const initEffect = () => effectsListElement.addEventListener('change', onEffectClick);
 
 const resetEffects = () => {
   effectsListElement.removeEventListener('change', onEffectClick);
@@ -102,4 +102,4 @@ const resetEffects = () => {
   previewImageElement.removeAttribute('class');
 };
 
-export {changeEffect, resetEffects};
+export {initEffect, resetEffects};

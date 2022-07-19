@@ -1,8 +1,10 @@
-import {addPhotos, imageFiltersElement} from './add-photos.js';
-import {getRandomPhotos} from './util.js';
+import {addPhotos} from './gallery.js';
+import {getRandomPhotos, debounce} from './util.js';
 
 const RANDOM_PICTURES_AMOUNT = 10;
+const RERENDER_DELAY = 500;
 
+const imageFiltersElement = document.querySelector('.img-filters');
 const filterFormElement = imageFiltersElement.querySelector('.img-filters__form');
 const filterButtonElements = filterFormElement.querySelectorAll('.img-filters__button');
 const defaultFilterElement = filterFormElement.querySelector('#filter-default');
@@ -38,4 +40,9 @@ const onFiltersButtonClick = (photos, evt) => {
   addPhotos(sortedPhotos);
 };
 
-export {onFiltersButtonClick, filterFormElement};
+const initFilters = (photosCopy) => {
+  imageFiltersElement.classList.remove('img-filters--inactive');
+  filterFormElement.addEventListener('click', debounce((evt) => onFiltersButtonClick(photosCopy, evt), RERENDER_DELAY));
+};
+
+export {initFilters};

@@ -1,20 +1,20 @@
+import {formElement, previewImageElement} from './util.js';
+
 const Scale = {
   STEP: 25,
   MIN: 25,
   MAX: 100
 };
 
-const formElement = document.querySelector('.img-upload__form');
 const scaleValueElement = formElement.querySelector('.scale__control--value');
 const scaleDownButtonElement = formElement.querySelector('.scale__control--smaller');
 const scaleUpButtonElement = formElement.querySelector('.scale__control--bigger');
-const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
 
 const getScaleValue = () => parseInt(scaleValueElement.value, 10);
 
 const onScaleButtonClick = (evt) => {
   const scaleElement = evt.target;
-  let scaleValue = 0;
+  let scaleValue;
   if (scaleElement.classList.contains('scale__control--smaller')) {
     scaleUpButtonElement.disabled = false;
     scaleValue = getScaleValue() - Scale.STEP;
@@ -32,7 +32,7 @@ const onScaleButtonClick = (evt) => {
   }
 };
 
-const changeScale = () => {
+const initScale = () => {
   scaleDownButtonElement.addEventListener('click', onScaleButtonClick);
   scaleUpButtonElement.addEventListener('click', onScaleButtonClick);
 };
@@ -43,4 +43,4 @@ const resetScale = () => {
   previewImageElement.removeAttribute('style');
 };
 
-export {changeScale, resetScale};
+export {initScale, resetScale};
