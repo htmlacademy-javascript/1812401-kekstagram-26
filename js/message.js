@@ -1,4 +1,4 @@
-import {bodyElement} from './big-photo.js';
+import {bodyElement} from './util.js';
 
 const ALERT_SHOW_TIME = 8000;
 

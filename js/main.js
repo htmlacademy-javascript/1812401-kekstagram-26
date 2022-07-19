@@ -1,13 +1,11 @@
-import {getPhotos} from './network.js';
-import {addPhotos} from './add-photos.js';
 import {showBigPhoto} from './big-photo.js';
-import {onImageLoadElementClick, setUserFormSubmit, closeModal, uploadFileElement} from './form.js';
-import {onFiltersButtonClick, filterFormElement} from './image-filter.js';
-import {debounce} from './util.js';
+import {initFilters} from './filters.js';
+import {initImageLoad} from './form.js';
+import {addPhotos} from './gallery.js';
+import {showAlert} from './message.js';
+import {getPhotos} from './network.js';
 
-const RERENDER_DELAY = 500;
-
-getPhotos((photos) => {
+const initPhotos = (photos) => {
   const photosElement = document.querySelector('.pictures');
   const photosCopy = photos.slice();
 
@@ -26,8 +24,8 @@ getPhotos((photos) => {
   };
 
   photosElement.addEventListener('click', onPictureClick);
-  uploadFileElement.addEventListener('change', onImageLoadElementClick);
-  filterFormElement.addEventListener('click', debounce((evt) => onFiltersButtonClick(photosCopy, evt), RERENDER_DELAY));
-});
+  initImageLoad();
+  initFilters(photosCopy);
+};
 
-setUserFormSubmit(closeModal);
+getPhotos(initPhotos, showAlert);

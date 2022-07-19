@@ -1,3 +1,8 @@
+const bodyElement = document.querySelector('body');
+const formElement = document.querySelector('.img-upload__form');
+const previewImageElement = formElement.querySelector('.img-upload__preview').querySelector('img');
+const bigPhotoElement = document.querySelector('.big-picture');
+
 const getRandomNumber = (firstRangeNumber, lastRangeNumber) => {
   let numberRange = lastRangeNumber - firstRangeNumber;
   if (numberRange < 0) {
@@ -30,4 +35,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export {getRandomPhotos, debounce};
+export {getRandomPhotos, debounce, bodyElement, formElement, previewImageElement, bigPhotoElement};
