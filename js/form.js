@@ -1,4 +1,4 @@
-import {initEffect, resetEffects} from './effect.js';
+import {initEffect, resetEffect} from './effect.js';
 import {validateHashtags} from './hashtags.js';
 import {showMessageModal} from './message.js';
 import {sendData} from './network.js';
@@ -57,7 +57,7 @@ const closeModal = () => {
   formElement.removeEventListener('submit', onFormSubmit);
   formElement.reset();
   resetScale();
-  resetEffects();
+  resetEffect();
 };
 
 function onModalEscKeydown (evt) {

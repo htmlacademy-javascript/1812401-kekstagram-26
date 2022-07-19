@@ -96,10 +96,10 @@ const onEffectClick = (evt) => {
 
 const initEffect = () => effectsListElement.addEventListener('change', onEffectClick);
 
-const resetEffects = () => {
+const resetEffect = () => {
   effectsListElement.removeEventListener('change', onEffectClick);
   sliderContainerElement.classList.add('hidden');
   previewImageElement.removeAttribute('class');
 };
 
-export {initEffect, resetEffects};
+export {initEffect, resetEffect};
