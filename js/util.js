@@ -35,4 +35,6 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export {getRandomPhotos, debounce, bodyElement, formElement, previewImageElement, bigPhotoElement};
+const checkEscapeKeydown = (evt) => evt.key === 'Escape';
+
+export {getRandomPhotos, debounce, checkEscapeKeydown, bodyElement, formElement, previewImageElement, bigPhotoElement};

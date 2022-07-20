@@ -16,33 +16,44 @@ const removeImages = () => {
   photosElements.forEach((element) => element.remove());
 };
 
-const onFiltersButtonClick = (photos, evt) => {
-  const activeFilterElement = evt.target.classList.contains('img-filters__button--active');
-  const photosCopy = photos.slice();
-  let sortedPhotos;
+const checkFilterTarget = (evt) => !evt.target.classList.contains('img-filters__button');
 
-  if (activeFilterElement && !randomFilterElement) {
-    return;
-  }
-  removeImages();
-  filterButtonElements.forEach((element) => element.classList.remove('img-filters__button--active'));
+const changeActiveFilterClass = (evt) => {
+  const activeFilterElement = Array.from(filterButtonElements).find((element) => element.classList.contains('img-filters__button--active'));
+
+  activeFilterElement.classList.remove('img-filters__button--active');
   evt.target.classList.add('img-filters__button--active');
-  switch (evt.target) {
-    case defaultFilterElement:
-      sortedPhotos = photos;
-      break;
-    case randomFilterElement:
-      sortedPhotos = getRandomPhotos(photos, RANDOM_PICTURES_AMOUNT);
-      break;
-    case discussedFilterElement:
-      sortedPhotos = photosCopy.sort((a, b) => b.comments.length - a.comments.length);
-  }
-  addPhotos(sortedPhotos);
+};
+
+const setFilterClick = (photos, cb) => {
+  filterFormElement.addEventListener('click', (evt) => {
+    if (checkFilterTarget(evt)) {
+      return;
+    }
+
+    const photosCopy = photos.slice();
+    let sortedPhotos;
+
+    removeImages();
+    changeActiveFilterClass(evt);
+    switch (evt.target) {
+      case defaultFilterElement:
+        sortedPhotos = photos;
+        break;
+      case randomFilterElement:
+        sortedPhotos = getRandomPhotos(photos, RANDOM_PICTURES_AMOUNT);
+        break;
+      case discussedFilterElement:
+        sortedPhotos = photosCopy.sort((a, b) => b.comments.length - a.comments.length);
+    }
+
+    cb(sortedPhotos);
+  });
 };
 
 const initFilters = (photosCopy) => {
   imageFiltersElement.classList.remove('img-filters--inactive');
-  filterFormElement.addEventListener('click', debounce((evt) => onFiltersButtonClick(photosCopy, evt), RERENDER_DELAY));
+  setFilterClick(photosCopy, debounce((photos) => addPhotos(photos), RERENDER_DELAY));
 };
 
 export {initFilters};

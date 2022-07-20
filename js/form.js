@@ -3,7 +3,7 @@ import {validateHashtags} from './hashtags.js';
 import {showMessageModal} from './message.js';
 import {sendData} from './network.js';
 import {initScale, resetScale} from './scale.js';
-import {bodyElement, formElement, previewImageElement} from './util.js';
+import {checkEscapeKeydown, bodyElement, formElement, previewImageElement} from './util.js';
 
 const FILE_TYPES = ['png', 'jpeg', 'jpg'];
 
@@ -23,6 +23,7 @@ const pristine = new Pristine(formElement, {
 pristine.addValidator(hashtagsInputElement, validateHashtags, 'В хештеге ошибка');
 
 const openModal = () => {
+  imageFileChooserElement.disabled = true;
   imageUploadElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
 
@@ -58,13 +59,16 @@ const closeModal = () => {
   formElement.reset();
   resetScale();
   resetEffect();
+  submitButtonElement.disabled = false;
+  imageFileChooserElement.disabled = false;
+  pristine.reset();
 };
 
 function onModalEscKeydown (evt) {
   const activeElementClasses = document.activeElement.classList;
   const sendErrorElement = bodyElement.querySelector('.error');
 
-  if (evt.key === 'Escape') {
+  if (checkEscapeKeydown(evt)) {
     evt.preventDefault();
     if (sendErrorElement) {
       sendErrorElement.remove();
@@ -82,14 +86,9 @@ function onModalCloseButtonClick () {
   closeModal();
 }
 
-const blockSubmitButton = () => {
-  submitButtonElement.disabled = true;
-  submitButtonElement.textContent = 'Публикую...';
-};
-
-const unblockSubmitButton = () => {
-  submitButtonElement.disabled = false;
-  submitButtonElement.textContent = 'Опубликовать';
+const toggleBlockSubmitButton = (isDisabled) => {
+  submitButtonElement.disabled = isDisabled;
+  submitButtonElement.textContent = (isDisabled) ? 'Публикую...' : 'Опубликовать';
 };
 
 function onFormSubmit (evt) {
@@ -97,15 +96,16 @@ function onFormSubmit (evt) {
 
   const isValid = pristine.validate();
   if (isValid) {
-    blockSubmitButton();
+    imageFileChooserElement.disabled = false;
+    toggleBlockSubmitButton(true);
     sendData(
       () => {
-        unblockSubmitButton();
+        toggleBlockSubmitButton(false);
         closeModal();
         showMessageModal('success');
       },
       () => {
-        unblockSubmitButton();
+        toggleBlockSubmitButton(false);
         showMessageModal('error');
       },
       new FormData(formElement),
