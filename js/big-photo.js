@@ -1,5 +1,5 @@
 import {removeComments, addComments, resetComments} from './comments.js';
-import {bodyElement, bigPhotoElement} from './util.js';
+import {checkEscapeKeydown, bodyElement, bigPhotoElement} from './util.js';
 
 const modalCancelElement = bigPhotoElement.querySelector('.big-picture__cancel');
 const imageElement = bigPhotoElement.querySelector('.big-picture__img').querySelector('img');
@@ -25,7 +25,7 @@ const closeModal = () => {
 };
 
 function onModalEscKeydown (evt) {
-  if (evt.key === 'Escape') {
+  if (checkEscapeKeydown(evt)) {
     evt.preventDefault();
     closeModal();
   }

@@ -1,4 +1,4 @@
-import {bodyElement} from './util.js';
+import {checkEscapeKeydown, bodyElement} from './util.js';
 
 const ALERT_SHOW_TIME = 8000;
 
@@ -27,7 +27,7 @@ const showAlert = (message) => {
 };
 
 const onMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape' && bodyElement.querySelector('.success')) {
+  if (checkEscapeKeydown(evt) && bodyElement.querySelector('.success')) {
     evt.preventDefault();
     closeMessageModal();
   }
