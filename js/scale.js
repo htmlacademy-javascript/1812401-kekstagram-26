@@ -8,8 +8,6 @@ const Scale = {
 
 const scaleButtonsContainerElement = formElement.querySelector('.scale');
 const scaleValueElement = formElement.querySelector('.scale__control--value');
-const scaleDownButtonElement = formElement.querySelector('.scale__control--smaller');
-const scaleUpButtonElement = formElement.querySelector('.scale__control--bigger');
 
 const getScaleValue = () => parseInt(scaleValueElement.value, 10);
 
@@ -25,15 +23,12 @@ const onScaleButtonClick = (evt) => {
   const scaleValue = (scaleElement.classList.contains('scale__control--smaller')) ? getScaleValue() - Scale.STEP : getScaleValue() + Scale.STEP;
 
   if (scaleValue < Scale.MIN || scaleValue > Scale.MAX) {
-    scaleElement.disabled = true;
-  } else {
-    const transformScaleValue = scaleValue / 100;
-    scaleValueElement.value = `${scaleValue}%`;
-    previewImageElement.style.transform = `scale(${transformScaleValue})`;
+    return;
   }
 
-  scaleUpButtonElement.disabled = false;
-  scaleDownButtonElement.disabled = false;
+  const transformScaleValue = scaleValue / 100;
+  scaleValueElement.value = `${scaleValue}%`;
+  previewImageElement.style.transform = `scale(${transformScaleValue})`;
 };
 
 const initScale = () => scaleButtonsContainerElement.addEventListener('click', onScaleButtonClick);

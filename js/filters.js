@@ -6,7 +6,7 @@ const RERENDER_DELAY = 500;
 
 const imageFiltersElement = document.querySelector('.img-filters');
 const filterFormElement = imageFiltersElement.querySelector('.img-filters__form');
-const filterButtonElements = Array.from(filterFormElement.querySelectorAll('.img-filters__button'));
+const filterButtonElements = filterFormElement.querySelectorAll('.img-filters__button');
 const defaultFilterElement = filterFormElement.querySelector('#filter-default');
 const randomFilterElement = filterFormElement.querySelector('#filter-random');
 const discussedFilterElement = filterFormElement.querySelector('#filter-discussed');
@@ -19,7 +19,7 @@ const removeImages = () => {
 const checkFilterTarget = (evt) => !evt.target.classList.contains('img-filters__button');
 
 const changeActiveFilterClass = (evt) => {
-  const activeFilterElement = filterButtonElements.find((element) => element.classList.contains('img-filters__button--active'));
+  const activeFilterElement = Array.from(filterButtonElements).find((element) => element.classList.contains('img-filters__button--active'));
 
   activeFilterElement.classList.remove('img-filters__button--active');
   evt.target.classList.add('img-filters__button--active');

@@ -88,7 +88,7 @@ function onModalCloseButtonClick () {
 
 const toggleBlockSubmitButton = (isDisabled) => {
   submitButtonElement.disabled = isDisabled;
-  submitButtonElement.textContent = (isDisabled === true) ? 'Публикую...' : 'Опубликовать';
+  submitButtonElement.textContent = (isDisabled) ? 'Публикую...' : 'Опубликовать';
 };
 
 function onFormSubmit (evt) {
@@ -97,15 +97,15 @@ function onFormSubmit (evt) {
   const isValid = pristine.validate();
   if (isValid) {
     imageFileChooserElement.disabled = false;
-    toggleBlockSubmitButton(isValid);
+    toggleBlockSubmitButton(true);
     sendData(
       () => {
-        toggleBlockSubmitButton(!isValid);
+        toggleBlockSubmitButton(false);
         closeModal();
         showMessageModal('success');
       },
       () => {
-        toggleBlockSubmitButton(!isValid);
+        toggleBlockSubmitButton(false);
         showMessageModal('error');
       },
       new FormData(formElement),
