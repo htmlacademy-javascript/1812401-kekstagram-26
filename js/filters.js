@@ -16,13 +16,7 @@ const removeImages = () => {
   photosElements.forEach((element) => element.remove());
 };
 
-const checkFilterTarget = (evt) => {
-  const notFilterButton = !evt.target.classList.contains('img-filters__button');
-  const activeFilterElement = evt.target.classList.contains('img-filters__button--active');
-  const notRandomFilterElement = !(evt.target.id === 'filter-random');
-
-  return notFilterButton || activeFilterElement && notRandomFilterElement;
-};
+const checkFilterTarget = (evt) => !evt.target.classList.contains('img-filters__button');
 
 const changeActiveFilterClass = (evt) => {
   const activeFilterElement = filterButtonElements.find((element) => element.classList.contains('img-filters__button--active'));
